@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: MA - KeyAuto API
+  version: 0.0.1
+
+tags:
+  - name: Авторизация
+
+paths:
+  /login:
+    post:
+      description: Аутентификация и авторизация
+      tags:
+        - Авторизация
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authRequest'
+      responses:
+        '200':
+          description: Если авторизация успешна
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authResult'
+        '401':
+          description: Любая ошибка авторизации - неправильный логин/пароль, нет прав, пользователь не существует
+  /checkToken:
+    post:
+      description: Проверка валидности токена
+      tags:
+        - Авторизация
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Токен валидный и активный
+        '401':
+          description: Токен невалидный
+
+components:
+  securitySchemes:
+    tokenized:
+      in: header
+      type: apiKey
+      name: Authorization
+  schemas:
+    user:
+      properties:
+        id:
+          type: integer
+          description: ID пользователя
+        name:
+          type: string
+          description: Имя пользователя
+        lastName:
+          type: string
+          description: Фамилия пользователя
+        role:
+          type: string
+          description: Роль пользователя (оценщик, старший оценщик, мастер, руководитель отдела продаж)
+          enum:
+            - appraiser
+            - appraiserLead
+            - master
+            - salesHead
+    authRequest:
+      properties:
+        login:
+          type: string
+          description: Логин
+        password:
+          type: string
+          description: Пароль
+    authResult:
+      properties:
+        token:
+          type: string
+          description: Токен
+        user:
+          $ref: '#/components/schemas/user'
