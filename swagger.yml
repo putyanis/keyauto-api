@@ -5,6 +5,7 @@ info:
 
 tags:
   - name: Авторизация
+  - name: Звонки
 
 paths:
   /login:
@@ -39,6 +40,99 @@ paths:
           description: Токен валидный и активный
         '401':
           description: Токен невалидный
+  /call/in:
+    get:
+      description: Входящие звонки
+      tags:
+        - Звонки
+      security:
+        - tokenized: []
+      parameters:
+        - $ref: '#/components/parameters/datePreset'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: Список входящих звонков
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/paging'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/callList'
+  /call/out:
+    get:
+      description: Исходящие звонки
+      tags:
+        - Звонки
+      security:
+        - tokenized: []
+      parameters:
+        - $ref: '#/components/parameters/datePreset'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: Список исходящих звонков
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/paging'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/callList'
+    post:
+      description: Регистрация исходящего звонка
+      tags:
+        - Звонки
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Результат регистрации
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/success'
+                  - $ref: '#/components/schemas/failed'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newCall'
+  /call/{callID}:
+    get:
+      description: Информация о звонке
+      tags:
+        - Звонки
+      security:
+        - tokenized: []
+      parameters:
+        - name: callID
+          in: path
+          description: Идентификатор звонка
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Полная информация о звонке
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/callList'
+                  - $ref: '#/components/schemas/callCard'
 
 components:
   securitySchemes:
@@ -81,3 +175,231 @@ components:
           description: Токен
         user:
           $ref: '#/components/schemas/user'
+    callList:
+      properties:
+        id:
+          type: string
+          description: Идентификатор звонка
+        status:
+          type: string
+          description: Статус звонка (Принят, Нет ответа, Занято)
+          enum:
+            - finished
+            - noAnswer
+            - busy
+        time:
+          type: string
+          format: date-time
+          description: Время звонка
+        contact:
+          $ref: '#/components/schemas/contact'
+        need:
+          type: string
+          description: Потребность (Обмен на автомобиль с пробегом, Обмен на новый автомобиль, Выкуп)
+          enum:
+            - tradeInUsed
+            - tradeInNew
+            - buyOut
+    callCard:
+      properties:
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        comment:
+          type: string
+          description: Комментарий
+        source:
+          $ref: '#/components/schemas/source'
+        callType:
+          type: string
+          description: Тип звонка (Уникальный, Целевой, Уникально-целевой, Повторный, Обратный, Прямой, Спам)
+          enum:
+            - unique
+            - targeted
+            - unique-targeted
+            - repeated
+            - back
+            - direct
+            - spam
+        reason:
+          $ref: '#/components/schemas/reason'
+        result:
+          $ref: '#/components/schemas/callResult'
+        dealer:
+          $ref: '#/components/schemas/dealer'
+        operator:
+          $ref: '#/components/schemas/operator'
+        seller:
+          $ref: '#/components/schemas/seller'
+        executor:
+          $ref: '#/components/schemas/executor'
+        canal:
+          $ref: '#/components/schemas/canal'
+        contract:
+          $ref: '#/components/schemas/contract'
+        lastModified:
+          type: string
+          format: date-time
+          description: Последнее изменение
+        modifiedBy:
+          type: string
+          description: Изменил
+        duration:
+          type: integer
+          description: Длительность
+        record:
+          type: string
+          description: Ссылка на файл с записью звонка
+    newCall:
+      description: Новый звонок
+      properties:
+        status:
+          type: string
+          description: Статус звонка (Принят, Нет ответа, Занято)
+          enum:
+            - finished
+            - noAnswer
+            - busy
+        time:
+          type: string
+          format: date-time
+          description: Время звонка
+        contact:
+          $ref: '#/components/schemas/contact'
+        need:
+          type: string
+          description: Потребность (Обмен на автомобиль с пробегом, Обмен на новый автомобиль, Выкуп)
+          enum:
+            - tradeInUsed
+            - tradeInNew
+            - buyOut
+        comment:
+          type: string
+          description: Комментарий
+        reason:
+          type: string
+          description: Идентификатор из справочника "Причина звонка"
+        result:
+          type: string
+          description: Идентификатор из справочника "Результат коммуникации"
+        dealer:
+          type: string
+          description: Идентификатор из справочника "Автосалон"
+        canal:
+          type: string
+          description: Идентификатор из справочника "Канал"
+        contract:
+          type: string
+          description: Идентификатор из справочника "Контракт"
+    contact:
+      description: Информация о клиенте
+      properties:
+        phone:
+          type: string
+          description: Номер телефона
+        name:
+          type: string
+          description: Кем представился
+    dictionary:
+      description: Значение справочника
+      properties:
+        value:
+          type: string
+          description: Выводимое значение
+        id:
+          type: string
+          description: Идентификатор
+    dealer:
+      description: Автосалон
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    operator:
+      description: Оператор
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    seller:
+      description: Продавец
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    executor:
+      description: Ответственный
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    canal:
+      description: Канал
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    contract:
+      description: Контракт
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    brand:
+      description: Марка автомобиля
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    model:
+      description: Модель автомобиля
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    source:
+      description: Источник
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    reason:
+      description: Причина звонка
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    callResult:
+      description: Результат коммуникации
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    paging:
+      description: Постраничная навигация
+      properties:
+        current:
+          type: integer
+          description: Текущая страница
+        pages:
+          type: integer
+          description: Количество страниц
+    success:
+      description: Успешное сохранение
+      properties:
+        status:
+          type: boolean
+          description: всегда true
+        id:
+          type: string
+          description: Идентификатор новой записи
+    failed:
+      description: Ошибка при сохранении
+      properties:
+        status:
+          type: boolean
+          description: всегда false
+        message:
+          type: string
+          description: Текст ошибки
+  parameters:
+    datePreset:
+      in: query
+      name: datePreset
+      description: Пресет периода (Все/all, Вчера/1ago, Сегодня/ [по умолчанию], Неделя/week, Месяц/month)
+      required: false
+      schema:
+        type: string
+    pageSize:
+      in: query
+      name: pageSize
+      description: Размер страницы
+      required: false
+      schema:
+        type: integer
+    page:
+      in: query
+      name: page
+      description: Номер страницы
+      required: false
+      schema:
+        type: integer
