@@ -6,6 +6,7 @@ info:
 tags:
   - name: Авторизация
   - name: Звонки
+  - name: Справочники
 
 paths:
   /login:
@@ -133,6 +134,173 @@ paths:
                 allOf:
                   - $ref: '#/components/schemas/callList'
                   - $ref: '#/components/schemas/callCard'
+  /dictionary/dealer:
+    get:
+      description: Значения справочника "Автосалон"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/dealer'
+  /dictionary/operator:
+    get:
+      description: Значения справочника "Оператор"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/operator'
+  /dictionary/seller:
+    get:
+      description: Значения справочника "Продавец"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/seller'
+  /dictionary/executor:
+    get:
+      description: Значения справочника "Ответственный". Отдаем тех, пользователей, на которых текущий пользователь может назначать сущность
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/executor'
+  /dictionary/canal:
+    get:
+      description: Значения справочника "Канал"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/canal'
+  /dictionary/contract:
+    get:
+      description: Значения справочника "Контракт"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/contract'
+  /dictionary/brand:
+    get:
+      description: Значения справочника "Марка автомобиля"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/brand'
+  /dictionary/brand/{brandID}/model:
+    get:
+      description: Значения справочника "Модель автомобиля"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      parameters:
+        - in: path
+          name: brandID
+          description: Идентификатор марки
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/model'
+  /dictionary/source:
+    get:
+      description: Значения справочника "Источник"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/source'
+  /dictionary/reason:
+    get:
+      description: Значения справочника "Причина звонка"
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/reason'
 
 components:
   securitySchemes:
