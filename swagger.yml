@@ -131,9 +131,9 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/callList'
-                  - $ref: '#/components/schemas/callCard'
+                oneOf:
+                  - $ref: '#/components/schemas/callCardOut'
+                  - $ref: '#/components/schemas/callCardIn'
   /dictionary/dealer:
     get:
       description: Значения справочника "Автосалон"
@@ -368,7 +368,7 @@ components:
             - tradeInUsed
             - tradeInNew
             - buyOut
-    callCard:
+    callCardIn:
       properties:
         brand:
           $ref: '#/components/schemas/brand'
@@ -377,8 +377,6 @@ components:
         comment:
           type: string
           description: Комментарий
-        source:
-          $ref: '#/components/schemas/source'
         callType:
           type: string
           description: Тип звонка (Уникальный, Целевой, Уникально-целевой, Повторный, Обратный, Прямой, Спам)
@@ -398,10 +396,6 @@ components:
           $ref: '#/components/schemas/dealer'
         operator:
           $ref: '#/components/schemas/operator'
-        seller:
-          $ref: '#/components/schemas/seller'
-        executor:
-          $ref: '#/components/schemas/executor'
         canal:
           $ref: '#/components/schemas/canal'
         contract:
@@ -419,6 +413,17 @@ components:
         record:
           type: string
           description: Ссылка на файл с записью звонка
+    callCardOut:
+      allOf:
+        - $ref: '#/components/schemas/callCardIn'
+      properties:
+        source:
+          $ref: '#/components/schemas/source'
+        seller:
+          $ref: '#/components/schemas/seller'
+        executor:
+          $ref: '#/components/schemas/executor'
+
     newCall:
       description: Новый звонок
       properties:
