@@ -110,7 +110,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/newCall'
+              oneOf:
+                - $ref: '#/components/schemas/newCall'
+                - $ref: '#/components/schemas/newCallExtended'
   /call/{callID}:
     get:
       description: Информация о звонке
@@ -378,16 +380,7 @@ components:
           type: string
           description: Комментарий
         callType:
-          type: string
-          description: Тип звонка (Уникальный, Целевой, Уникально-целевой, Повторный, Обратный, Прямой, Спам)
-          enum:
-            - unique
-            - targeted
-            - unique-targeted
-            - repeated
-            - back
-            - direct
-            - spam
+          $ref: '#/components/schemas/callType'
         reason:
           $ref: '#/components/schemas/reason'
         result:
@@ -423,7 +416,6 @@ components:
           $ref: '#/components/schemas/seller'
         executor:
           $ref: '#/components/schemas/executor'
-
     newCall:
       description: Новый звонок
       properties:
@@ -465,6 +457,19 @@ components:
         contract:
           type: string
           description: Идентификатор из справочника "Контракт"
+    newCallExtended:
+      allOf:
+        - $ref: '#/components/schemas/newCall'
+      properties:
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        operator:
+          $ref: '#/components/schemas/operator'
+        callType:
+          $ref: '#/components/schemas/callType'
+
     contact:
       description: Информация о клиенте
       properties:
@@ -554,6 +559,17 @@ components:
         message:
           type: string
           description: Текст ошибки
+    callType:
+      type: string
+      description: Тип звонка (Уникальный, Целевой, Уникально-целевой, Повторный, Обратный, Прямой, Спам)
+      enum:
+        - unique
+        - targeted
+        - unique-targeted
+        - repeated
+        - back
+        - direct
+        - spam
   parameters:
     datePreset:
       in: query
