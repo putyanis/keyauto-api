@@ -7,6 +7,7 @@ tags:
   - name: Авторизация
   - name: Звонки
   - name: Справочники
+  - name: Задачи
 
 paths:
   /login:
@@ -136,6 +137,45 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/callCardOut'
                   - $ref: '#/components/schemas/callCardIn'
+  /issue:
+    get:
+      description: Список задач
+      tags:
+        - Задачи
+      security:
+        - tokenized: []
+      parameters:
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/datePreset'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/createdAt'
+        - $ref: '#/components/parameters/doneAt'
+        - $ref: '#/components/parameters/issueType'
+        - $ref: '#/components/parameters/issueStatus'
+        - $ref: '#/components/parameters/canal'
+        - $ref: '#/components/parameters/contract'
+        - $ref: '#/components/parameters/dealer'
+        - $ref: '#/components/parameters/executor'
+        - $ref: '#/components/parameters/seller'
+        - $ref: '#/components/parameters/phone'
+        - $ref: '#/components/parameters/vin'
+      responses:
+        '200':
+          description: Список доступных задач
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/paging'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/issueList'
+                  statistic:
+                    $ref: '#/components/schemas/issueStatistic'
   /dictionary/dealer:
     get:
       description: Значения справочника "Автосалон"
@@ -469,6 +509,28 @@ components:
           $ref: '#/components/schemas/operator'
         callType:
           $ref: '#/components/schemas/callType'
+    issueList:
+      description: Задача в списке
+      properties:
+        id:
+          description: Идентификатор задачи
+          type: string
+        created:
+          description: Дата создания задачи
+          type: string
+          format: date-time
+        comment:
+          description: Последний комментарий
+          type: string
+        type:
+          $ref: '#/components/schemas/issueType'
+        status:
+          description: Статус задачи (Новая, В работе, Завершено)
+          type: string
+          enum:
+            - todo
+            - progress
+            - done
 
     contact:
       description: Информация о клиенте
@@ -532,6 +594,10 @@ components:
       description: Результат коммуникации
       allOf:
         - $ref: '#/components/schemas/dictionary'
+    issueType:
+      description: Типы задач
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
     paging:
       description: Постраничная навигация
       properties:
@@ -570,6 +636,18 @@ components:
         - back
         - direct
         - spam
+    issueStatistic:
+      description: Статистика задач
+      properties:
+        all:
+          description: Всего по фильтру
+          type: integer
+        progress:
+          description: В работе по фильтру
+          type: integer
+        done:
+          description: Завершено по фильтру
+          type: integer
   parameters:
     datePreset:
       in: query
@@ -592,3 +670,96 @@ components:
       required: false
       schema:
         type: integer
+    sort:
+      in: query
+      name: sort
+      description: Сортировка экземпляров сущности (актуальные по дате выполнения, новые по дате создания, старые по дате создания, новые по статусу, в работе по статусу, завершенные по статусу)
+      required: false
+      schema:
+        type: string
+        enum:
+          - done-asc
+          - created-desc
+          - created-asc
+          - status-from-new
+          - status-from-progress
+          - status-from-done
+    createdAt:
+      in: query
+      name: created
+      description: Дата создания
+      required: false
+      schema:
+        type: string
+        format: date-time
+    doneAt:
+      in: query
+      name: done
+      description: Дата выполнения
+      required: false
+      schema:
+        type: string
+        format: date-time
+    issueType:
+      in: query
+      name: type
+      description: Тип задачи (идентификатор из справочника типов задач)
+      required: false
+      schema:
+        type: string
+    issueStatus:
+      in: query
+      name: status
+      description: Фильтра по статусам задач (Всe, В работе, Завершено
+      required: false
+      schema:
+        type: string
+    canal:
+      in: query
+      name: canal
+      description: Фильтр по каналу (идентификатор из справочника каналов)
+      required: false
+      schema:
+        type: string
+    contract:
+      in: query
+      name: contract
+      description: Фильтр по контракту (идентификатор из справочника контрактов)
+      required: false
+      schema:
+        type: string
+    dealer:
+      in: query
+      name: dealer
+      description: Фильтр по автосалону (идентификатор из справочника автосалонов)
+      required: false
+      schema:
+        type: string
+    executor:
+      in: query
+      name: executor
+      description: Фильтр по ответственному (идентификатор из справочника пользователей)
+      required: false
+      schema:
+        type: string
+    seller:
+      in: query
+      name: seller
+      description: Фильтр по продавцу (идентификатор из справочника продавцов)
+      required: false
+      schema:
+        type: string
+    phone:
+      in: query
+      name: phone
+      description: Номер телефона контакта/котрагента
+      required: false
+      schema:
+        type: string
+    vin:
+      in: query
+      name: vin
+      description: VIN автомобиля
+      required: false
+      schema:
+        type: string
