@@ -53,6 +53,20 @@ paths:
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/canal'
+        - $ref: '#/components/parameters/contract'
+        - $ref: '#/components/parameters/dealer'
+        - $ref: '#/components/parameters/seller'
+        - $ref: '#/components/parameters/phone'
+        - $ref: '#/components/parameters/callDate'
+        - $ref: '#/components/parameters/callDirection'
+        - $ref: '#/components/parameters/callStatus'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/callType'
+        - $ref: '#/components/parameters/callReason'
+        - $ref: '#/components/parameters/callResult'
+        - $ref: '#/components/parameters/callOperator'
+        - $ref: '#/components/parameters/callAssignee'
       responses:
         '200':
           description: Список входящих звонков
@@ -67,6 +81,32 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/callList'
+  /call/in/{callID}:
+    put:
+      description: Обновление входящего звонка
+      tags:
+        - Звонки
+      security:
+        - tokenized: [ ]
+      parameters:
+        - $ref: '#/components/parameters/callID'
+      requestBody:
+        required: true
+        description: Поля входящего звонка
+        content:
+          'application/json':
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/callCardInUpdate'
+      responses:
+        '200':
+          description: Результат обновления входящего звонка
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/success'
+                  - $ref: '#/components/schemas/failed'
   /call/out:
     get:
       description: Исходящие звонки
@@ -78,6 +118,20 @@ paths:
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/canal'
+        - $ref: '#/components/parameters/contract'
+        - $ref: '#/components/parameters/dealer'
+        - $ref: '#/components/parameters/seller'
+        - $ref: '#/components/parameters/phone'
+        - $ref: '#/components/parameters/callDate'
+        - $ref: '#/components/parameters/callDirection'
+        - $ref: '#/components/parameters/callStatus'
+        - $ref: '#/components/parameters/source'
+        - $ref: '#/components/parameters/callType'
+        - $ref: '#/components/parameters/callReason'
+        - $ref: '#/components/parameters/callResult'
+        - $ref: '#/components/parameters/callOperator'
+        - $ref: '#/components/parameters/callAssignee'
       responses:
         '200':
           description: Список исходящих звонков
@@ -114,6 +168,32 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/newCall'
                 - $ref: '#/components/schemas/newCallExtended'
+  /call/out/{callID}:
+    put:
+      description: Обновление исходящего звонка
+      tags:
+        - Звонки
+      security:
+        - tokenized: [ ]
+      parameters:
+        - $ref: '#/components/parameters/callID'
+      requestBody:
+        required: true
+        description: Поля исходящего звонка
+        content:
+          'application/json':
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/callCardOutUpdate'
+      responses:
+        '200':
+          description: Результат обновления исходящего звонка
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/success'
+                  - $ref: '#/components/schemas/failed'
   /call/{callID}:
     get:
       description: Информация о звонке
@@ -122,12 +202,7 @@ paths:
       security:
         - tokenized: []
       parameters:
-        - name: callID
-          in: path
-          description: Идентификатор звонка
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/callID'
       responses:
         '200':
           description: Полная информация о звонке
@@ -145,7 +220,7 @@ paths:
       security:
         - tokenized: []
       parameters:
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/callSort'
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
@@ -156,7 +231,7 @@ paths:
         - $ref: '#/components/parameters/canal'
         - $ref: '#/components/parameters/contract'
         - $ref: '#/components/parameters/dealer'
-        - $ref: '#/components/parameters/executor'
+        - $ref: '#/components/parameters/issueAssignee'
         - $ref: '#/components/parameters/seller'
         - $ref: '#/components/parameters/phone'
         - $ref: '#/components/parameters/vin'
@@ -224,7 +299,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/seller'
-  /dictionary/executor:
+  /dictionary/issueAssignee:
     get:
       description: Значения справочника "Ответственный". Отдаем тех, пользователей, на которых текущий пользователь может назначать сущность
       tags:
@@ -239,7 +314,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/executor'
+                  $ref: '#/components/schemas/issueAssignee'
   /dictionary/canal:
     get:
       description: Значения справочника "Канал"
@@ -343,6 +418,70 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/reason'
+  /dictionary/need:
+    get:
+      description: Значения справочника "Потребность"
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/need'
+  /dictionary/result:
+    get:
+      description: Значения справочника "Результат коммуникации"
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/callResult'
+  /dictionary/callType:
+    get:
+      description: Значения справочника "Тип звонка"
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/callType'
+  /dictionary/callAssignees:
+    get:
+      description: Список пользователей для фильтра "Ответственный" в звонках
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/callAssignee'
 
 components:
   securitySchemes:
@@ -404,14 +543,16 @@ components:
         contact:
           $ref: '#/components/schemas/contact'
         need:
-          type: string
-          description: Потребность (Обмен на автомобиль с пробегом, Обмен на новый автомобиль, Выкуп)
-          enum:
-            - tradeInUsed
-            - tradeInNew
-            - buyOut
+          $ref: '#/components/schemas/need'
     callCardIn:
       properties:
+        status:
+          type: string
+          description: Статус звонка (Принят, Нет ответа, Занято)
+          enum:
+            - finished
+            - noAnswer
+            - busy
         brand:
           $ref: '#/components/schemas/brand'
         model:
@@ -446,6 +587,46 @@ components:
         record:
           type: string
           description: Ссылка на файл с записью звонка
+    callCardInUpdate:
+      properties:
+        contact:
+          $ref: '#/components/schemas/contact'
+        need:
+          $ref: '#/components/schemas/need'
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        comment:
+          type: string
+          description: Комментарий
+        dealer:
+          $ref: '#/components/schemas/dealer'
+        operator:
+          $ref: '#/components/schemas/operator'
+        contract:
+          $ref: '#/components/schemas/contract'
+    callCardOutUpdate:
+      properties:
+        contact:
+          $ref: '#/components/schemas/contact'
+        need:
+          $ref: '#/components/schemas/need'
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        comment:
+          type: string
+          description: Комментарий
+        reason:
+          $ref: '#/components/schemas/reason'
+        result:
+          $ref: '#/components/schemas/callResult'
+        dealer:
+          $ref: '#/components/schemas/dealer'
+        contract:
+          $ref: '#/components/schemas/contract'
     callCardOut:
       allOf:
         - $ref: '#/components/schemas/callCardIn'
@@ -454,8 +635,8 @@ components:
           $ref: '#/components/schemas/source'
         seller:
           $ref: '#/components/schemas/seller'
-        executor:
-          $ref: '#/components/schemas/executor'
+        assignee:
+          $ref: '#/components/schemas/callAssignee'
     newCall:
       description: Новый звонок
       properties:
@@ -473,12 +654,7 @@ components:
         contact:
           $ref: '#/components/schemas/contact'
         need:
-          type: string
-          description: Потребность (Обмен на автомобиль с пробегом, Обмен на новый автомобиль, Выкуп)
-          enum:
-            - tradeInUsed
-            - tradeInNew
-            - buyOut
+          $ref: '#/components/schemas/need'
         comment:
           type: string
           description: Комментарий
@@ -562,7 +738,7 @@ components:
       description: Продавец
       allOf:
         - $ref: '#/components/schemas/dictionary'
-    executor:
+    issueAssignee:
       description: Ответственный
       allOf:
         - $ref: '#/components/schemas/dictionary'
@@ -598,6 +774,18 @@ components:
       description: Типы задач
       allOf:
         - $ref: '#/components/schemas/dictionary'
+    need:
+      description: Потребность (Обмен на автомобиль с пробегом, Обмен на новый автомобиль, Выкуп)
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    callType:
+      description: Тип звонка (Уникальный, Целевой, Уникально-целевой, Повторный, Обратный, Прямой, Спам)
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    callAssignee:
+      description: Ответственный за звонок
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
     paging:
       description: Постраничная навигация
       properties:
@@ -625,17 +813,6 @@ components:
         message:
           type: string
           description: Текст ошибки
-    callType:
-      type: string
-      description: Тип звонка (Уникальный, Целевой, Уникально-целевой, Повторный, Обратный, Прямой, Спам)
-      enum:
-        - unique
-        - targeted
-        - unique-targeted
-        - repeated
-        - back
-        - direct
-        - spam
     issueStatistic:
       description: Статистика задач
       properties:
@@ -670,7 +847,7 @@ components:
       required: false
       schema:
         type: integer
-    sort:
+    callSort:
       in: query
       name: sort
       description: Сортировка экземпляров сущности (актуальные по дате выполнения, новые по дате создания, старые по дате создания, новые по статусу, в работе по статусу, завершенные по статусу)
@@ -735,9 +912,9 @@ components:
       required: false
       schema:
         type: string
-    executor:
+    issueAssignee:
       in: query
-      name: executor
+      name: assignee
       description: Фильтр по ответственному (идентификатор из справочника пользователей)
       required: false
       schema:
@@ -761,5 +938,79 @@ components:
       name: vin
       description: VIN автомобиля
       required: false
+      schema:
+        type: string
+    callDate:
+      in: query
+      name: date
+      description: Дата звонка
+      required: false
+      schema:
+        type: string
+        pattern: DD.MM.YYYY
+    callDirection:
+      in: query
+      name: direction
+      description: Направление звонка (входящий, исходящий)
+      required: false
+      schema:
+        type: string
+        enum:
+          - in
+          - out
+    callStatus:
+      in: query
+      name: status
+      description: Статус звонка
+      required: false
+      schema:
+        type: string
+    source:
+      in: query
+      name: source
+      description: Источник
+      required: false
+      schema:
+        type: string
+    callType:
+      in: query
+      name: type
+      description: Тип звонка
+      required: false
+      schema:
+        type: string
+    callReason:
+      in: query
+      name: reason
+      description: Причина звонка
+      required: false
+      schema:
+        type: string
+    callResult:
+      in: query
+      name: result
+      description: Результат коммуникации
+      required: false
+      schema:
+        type: string
+    callOperator:
+      in: query
+      name: operator
+      description: Оператор
+      required: false
+      schema:
+        type: string
+    callAssignee:
+      in: query
+      name: assignee
+      description: Ответственный
+      required: false
+      schema:
+        type: string
+    callID:
+      in: path
+      name: callID
+      description: Идентификатор звонка
+      required: true
       schema:
         type: string
