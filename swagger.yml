@@ -50,6 +50,7 @@ paths:
       security:
         - tokenized: []
       parameters:
+        - $ref: '#/components/parameters/callSort'
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
@@ -115,6 +116,7 @@ paths:
       security:
         - tokenized: []
       parameters:
+        - $ref: '#/components/parameters/callSort'
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
@@ -220,7 +222,7 @@ paths:
       security:
         - tokenized: []
       parameters:
-        - $ref: '#/components/parameters/callSort'
+        - $ref: '#/components/parameters/issueSort'
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
@@ -850,7 +852,19 @@ components:
     callSort:
       in: query
       name: sort
-      description: Сортировка экземпляров сущности (актуальные по дате выполнения, новые по дате создания, старые по дате создания, новые по статусу, в работе по статусу, завершенные по статусу)
+      description: Сортировка звонков (сначала новые, сначала старые, сначала продолжительные, сначала короткие)
+      required: false
+      schema:
+        type: string
+        enum:
+          - created-desc
+          - created-asc
+          - duration-desc
+          - duration-asc
+    issueSort:
+      in: query
+      name: sort
+      description: Сортировка задач (актуальные по дате выполнения, новые по дате создания, старые по дате создания, новые по статусу, в работе по статусу, завершенные по статусу)
       required: false
       schema:
         type: string
