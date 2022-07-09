@@ -51,6 +51,7 @@ paths:
         - tokenized: []
       parameters:
         - $ref: '#/components/parameters/callSort'
+        - $ref: '#/components/parameters/fullText'
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
@@ -119,6 +120,7 @@ paths:
         - tokenized: []
       parameters:
         - $ref: '#/components/parameters/callSort'
+        - $ref: '#/components/parameters/fullText'
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
@@ -227,6 +229,7 @@ paths:
         - tokenized: []
       parameters:
         - $ref: '#/components/parameters/issueSort'
+        - $ref: '#/components/parameters/fullText'
         - $ref: '#/components/parameters/datePreset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
@@ -838,6 +841,13 @@ components:
           description: Общее количество звонков по фильтру
           type: integer
   parameters:
+    fullText:
+      in: query
+      name: fullText
+      description: Полнотекстовый поиск
+      required: false
+      schema:
+        type: string
     datePreset:
       in: query
       name: datePreset
