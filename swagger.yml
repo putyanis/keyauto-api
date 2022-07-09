@@ -266,6 +266,29 @@ paths:
                       $ref: '#/components/schemas/issueList'
                   statistic:
                     $ref: '#/components/schemas/issueStatistic'
+  /issue/{issueID}:
+    get:
+      description: Информация о задаче
+      tags:
+        - Задачи
+      security:
+        - tokenized: [ ]
+      parameters:
+        - $ref: '#/components/parameters/issueID'
+      responses:
+        '200':
+          description: Полная информация о задаче
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Идентификатор
+                  - allOf:
+                      - $ref: '#/components/schemas/issueCard'
   /dictionary/dealer:
     get:
       description: Значения справочника "Автосалон"
@@ -401,6 +424,35 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/model'
+  /dictionary/brand/{brandID}/model/{modelID}/generation:
+    get:
+      description: Список поколений модели
+      tags:
+        - Справочники
+      security:
+        - tokenized: []
+      parameters:
+        - in: path
+          name: brandID
+          description: Идентификатор марки
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: modelID
+          description: Идентификатор модели
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/generation'
   /dictionary/source:
     get:
       description: Значения справочника "Источник"
@@ -497,6 +549,214 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/callAssignee'
+  /dictionary/counterpartyType:
+    get:
+      description: Список типов клиентов
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/counterpartyType'
+  /dictionary/citizenship:
+    get:
+      description: Список гражданств
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/citizenship'
+  /dictionary/documentType:
+    get:
+      description: Список типов документов
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/documentType'
+  /dictionary/carType:
+    get:
+      description: Список типов ТС
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/carType'
+  /dictionary/bodyType:
+    get:
+      description: Список типов кузова
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/bodyType'
+  /dictionary/wheelPosition:
+    get:
+      description: Список расположений руля
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/wheelPosition'
+  /dictionary/transmissionType:
+    get:
+      description: Список типов коробки передач
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/transmissionType'
+  /dictionary/driveType:
+    get:
+      description: Список типов привода
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/driveType'
+  /dictionary/carColor:
+    get:
+      description: Список цветов кузова
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/carColor'
+  /dictionary/interiorColor:
+    get:
+      description: Список цветов салона
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/interiorColor'
+  /dictionary/condition:
+    get:
+      description: Список состояний автомобиля
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/condition'
+  /dictionary/seats:
+    get:
+      description: Список кол-ва мест
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/seats'
+  /dictionary/doors:
+    get:
+      description: Список кол-ва дверей
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/doors'
 
 components:
   securitySchemes:
@@ -726,16 +986,216 @@ components:
             - todo
             - progress
             - done
-
+    issueCard:
+      description: Информация о задаче
+      properties:
+        status:
+          description: Статус задачи (Новая, В работе, Завершено)
+          type: string
+          enum:
+            - todo
+            - progress
+            - done
+        expires:
+          description: Дата выполнения
+          type: string
+          format: data-time
+        type:
+          $ref: '#/components/schemas/issueType'
+        comment:
+          description: Комментарий
+          type: string
+        contact:
+          $ref: '#/components/schemas/contact'
+        need:
+          $ref: '#/components/schemas/need'
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        dealer:
+          $ref: '#/components/schemas/dealer'
+        seller:
+          $ref: '#/components/schemas/seller'
+        assignee:
+          $ref: '#/components/schemas/issueAssignee'
+        canal:
+          $ref: '#/components/schemas/canal'
+        contract:
+          $ref: '#/components/schemas/contract'
+        createdAt:
+          type: string
+          format: date-time
+          description: Дата создания
+        createdBy:
+          $ref: '#/components/schemas/issueAssignee'
+        lastModified:
+          type: string
+          format: date-time
+          description: Последниее изменения
+        lastModifiedBy:
+          $ref: '#/components/schemas/issueAssignee'
+        car:
+          $ref: '#/components/schemas/issueCar'
     contact:
       description: Информация о клиенте
+      oneOf:
+        - type: object
+          properties:
+            phone:
+              type: string
+              description: Номер телефона
+            name:
+              type: string
+              description: Кем представился
+            email:
+              type: string
+              description: Email
+            comment:
+              description: Комментаций
+              type: string
+        - $ref: '#/components/schemas/counterparty'
+    counterparty:
+      description: Контрагент
       properties:
+        id:
+          type: string
+          description: Идентификатор контрагента
+        type:
+          $ref: '#/components/schemas/counterpartyType'
         phone:
           type: string
-          description: Номер телефона
-        name:
+          description: Телефон
+        email:
           type: string
-          description: Кем представился
+          description: Email
+        lastName:
+          type: string
+          description: Фамилия
+        firstName:
+          type: string
+          description: Имя
+        patronymic:
+          type: string
+          description: Отчество
+        birthday:
+          type: string
+          format: date-time
+          description: Дата рождения
+        placeBirth:
+          type: string
+          description: Место рождения
+        gender:
+          type: string
+          enum:
+            - m
+            - f
+        citizenship:
+          $ref: '#/components/schemas/citizenship'
+        documentType:
+          $ref: '#/components/schemas/documentType'
+        number:
+          type: string
+          description: Серия и номер документа
+        issuedBy:
+          type: string
+          description: Выдан
+        issuedCode:
+          type: string
+          description: Код подразделения
+        issuedAt:
+          type: string
+          format: date-time
+          description: Дата выдачи
+        address:
+          type: string
+          description: Адрес
+        ppd:
+          type: boolean
+          description: Получено согласие на ОПД
+        signedAt:
+          type: string
+          format: date-time
+          description: Дата подписания
+        expiresAt:
+          type: string
+          format: date-time
+          description: Срок действия
+        scan:
+          type: string
+          format: binary
+          description: Фотография/скан согласия на ОПД
+        comment:
+          description: Комментаций
+          type: string
+    issueCar:
+      description: Автомобиль в задаче
+      properties:
+        id:
+          type: string
+          description: Идентификатор
+        vin:
+          type: string
+          description: VIN
+        number:
+          type: string
+          description: Гос. номер
+        bodyNumber:
+          type: string
+          description: Номер кузова
+        engineNumber:
+          type: string
+          description: Номер двигателя
+        carType:
+          $ref: '#/components/schemas/carType'
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        generation:
+          $ref: '#/components/schemas/generation'
+        bodyType:
+          $ref: '#/components/schemas/bodyType'
+        wheelPosition:
+          $ref: '#/components/schemas/wheelPosition'
+        year:
+          type: string
+          description: Год выпуска
+        engineVolume:
+          type: number
+          description: Объем двигателя, л.
+        enginePower:
+          type: number
+          description: Мощность двигателя, л.с.
+        transmissionType:
+          $ref: '#/components/schemas/transmissionType'
+        driveType:
+          $ref: '#/components/schemas/driveType'
+        mileage:
+          type: number
+          description: Пробег
+        color:
+          $ref: '#/components/schemas/carColor'
+        metallic:
+          type: boolean
+          description: Признак цвета металлик
+        interiorColor:
+          $ref: '#/components/schemas/interiorColor'
+        condition:
+          $ref: '#/components/schemas/condition'
+        seats:
+          $ref: '#/components/schemas/seats'
+        doors:
+          $ref: '#/components/schemas/doors'
+        armored:
+          type: boolean
+          description: Признак бронированного автомобиля
+        class:
+          $ref: '#/components/schemas/class'
+        comment:
+          type: string
+          description: Комментарий
+
     dictionary:
       description: Значение справочника
       properties:
@@ -803,6 +1263,66 @@ components:
         - $ref: '#/components/schemas/dictionary'
     callAssignee:
       description: Ответственный за звонок
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    counterpartyType:
+      description: Типы клиентов
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    citizenship:
+      description: Типы гражданств
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    documentType:
+      description: Типы документов
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    carType:
+      description: Тип ТС
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    generation:
+      description: Поколение ТС
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    bodyType:
+      description: Тип кузова
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    wheelPosition:
+      description: Расположение руля
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    transmissionType:
+      description: Коробка передач
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    driveType:
+      description: Тип привода
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    carColor:
+      description: Цвет кузова
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    interiorColor:
+      description: Цвет салона
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    condition:
+      description: Состояние
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    seats:
+      description: Количество мест
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    doors:
+      description: Количество дверей
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    class:
+      description: Класс автомобиля
       allOf:
         - $ref: '#/components/schemas/dictionary'
     paging:
@@ -1055,6 +1575,13 @@ components:
       in: path
       name: callID
       description: Идентификатор звонка
+      required: true
+      schema:
+        type: string
+    issueID:
+      in: path
+      name: issueID
+      description: Идентификатор задачи
       required: true
       schema:
         type: string
