@@ -704,6 +704,10 @@ components:
           description: Дата создания задачи
           type: string
           format: date-time
+        changed:
+          description: Дата последнео изменения задачи
+          type: string
+          format: date-time
         comment:
           description: Последний комментарий
           type: string
