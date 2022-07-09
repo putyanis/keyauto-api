@@ -82,6 +82,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/callList'
+                  statistic:
+                    $ref: '#/components/schemas/callStatistic'
   /call/in/{callID}:
     put:
       description: Обновление входящего звонка
@@ -148,6 +150,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/callList'
+                  statistic:
+                    $ref: '#/components/schemas/callStatistic'
     post:
       description: Регистрация исходящего звонка
       tags:
@@ -826,6 +830,12 @@ components:
           type: integer
         done:
           description: Завершено по фильтру
+          type: integer
+    callStatistic:
+      description: Статистика звонков
+      properties:
+        total:
+          description: Общее количество звонков по фильтру
           type: integer
   parameters:
     datePreset:
