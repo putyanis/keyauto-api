@@ -217,9 +217,15 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/callCardOut'
-                  - $ref: '#/components/schemas/callCardIn'
+                allOf:
+                  - type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Идентификатор
+                  - oneOf:
+                      - $ref: '#/components/schemas/callCardOut'
+                      - $ref: '#/components/schemas/callCardIn'
   /issue:
     get:
       description: Список задач
