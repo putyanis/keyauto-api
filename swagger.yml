@@ -6,8 +6,8 @@ info:
 tags:
   - name: Авторизация
   - name: Звонки
-  - name: Справочники
   - name: Задачи
+  - name: Справочники
 
 paths:
   /login:
@@ -929,7 +929,7 @@ components:
     issueAssignee:
       in: query
       name: assignee
-      description: Фильтр по ответственному (идентификатор из справочника пользователей)
+      description: Фильтр по ответственному (идентификатор из справочника пользователей, null если отмечен "Нет ответственного")
       required: false
       schema:
         type: string
@@ -1017,7 +1017,7 @@ components:
     callAssignee:
       in: query
       name: assignee
-      description: Ответственный
+      description: Ответственный (null если отмечен "Нет ответственного")
       required: false
       schema:
         type: string
