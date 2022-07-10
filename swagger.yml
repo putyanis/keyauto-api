@@ -446,6 +446,32 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/clientList'
+    post:
+      description: Добавдение клиента
+      tags:
+        - Клиенты
+      security:
+        - tokenized: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/clientCard'
+      responses:
+        '200':
+          description: Результат создания клиента
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      issue:
+                        $ref: '#/components/schemas/clientCard'
+                  - oneOf:
+                      - $ref: '#/components/schemas/success'
+                      - $ref: '#/components/schemas/failed'
   /client/{clientID}:
     get:
       description: Информация о клиенте
