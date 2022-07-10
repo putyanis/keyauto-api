@@ -267,6 +267,32 @@ paths:
                       $ref: '#/components/schemas/issueList'
                   statistic:
                     $ref: '#/components/schemas/issueStatistic'
+    post:
+      description: Создание задачи
+      tags:
+        - Задачи
+      security:
+        - tokenized: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/issueCard'
+      responses:
+        '200':
+          description: Результат создания задачи
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      issue:
+                        $ref: '#/components/schemas/issueCard'
+                  - oneOf:
+                      - $ref: '#/components/schemas/success'
+                      - $ref: '#/components/schemas/failed'
   /issue/{issueID}:
     get:
       description: Информация о задаче
@@ -290,6 +316,34 @@ paths:
                         description: Идентификатор
                   - allOf:
                       - $ref: '#/components/schemas/issueCard'
+    put:
+      description: Обновление задачи
+      tags:
+        - Задачи
+      security:
+        - tokenized: []
+      parameters:
+        - $ref: '#/components/parameters/issueID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/issueCard'
+      responses:
+        '200':
+          description: Результат обновления задачи
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      issue:
+                        $ref: '#/components/schemas/issueCard'
+                  - oneOf:
+                    - $ref: '#/components/schemas/success'
+                    - $ref: '#/components/schemas/failed'
   /checkClient:
     post:
       description: Проверка клиента
