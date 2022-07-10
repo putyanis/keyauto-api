@@ -7,6 +7,7 @@ tags:
   - name: Авторизация
   - name: Звонки
   - name: Задачи
+  - name: Проверки
   - name: Справочники
 
 paths:
@@ -289,6 +290,68 @@ paths:
                         description: Идентификатор
                   - allOf:
                       - $ref: '#/components/schemas/issueCard'
+  /checkClient:
+    post:
+      description: Проверка клиента
+      tags:
+        - Проверки
+      security:
+        - tokenized: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/counterparty'
+                - $ref: '#/components/schemas/forceCheck'
+      responses:
+        '200':
+          description: Результат проверки клиента
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/checkResults'
+                  - $ref: '#/components/schemas/checkNotPossible'
+  /checkCar:
+    post:
+      description: Проверка автомобиля
+      tags:
+        - Проверки
+      security:
+        - tokenized: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/issueCar'
+                - $ref: '#/components/schemas/forceCheck'
+      responses:
+        '200':
+          description: Результат проверки автомобиля
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/checkResults'
+                  - $ref: '#/components/schemas/checkNotPossible'
+  /report/{reportID}:
+    get:
+      description: Получить отчет о проверки
+      tags:
+        - Проверки
+      security:
+        - tokenized: []
+      parameters:
+        - $ref: '#/components/parameters/reportID'
+      responses:
+        '200':
+          description: BiteArray файла с отчетом
+        '404':
+          description: Отчет не существует
   /dictionary/dealer:
     get:
       description: Значения справочника "Автосалон"
@@ -1195,6 +1258,47 @@ components:
         comment:
           type: string
           description: Комментарий
+    checkResults:
+      description: Результат проверки, если данных достаточно
+      properties:
+        code:
+          type: integer
+          description: Код результата проверки. Если все сервисы успешно пройдены - 1, если есть хотя бы одна проблема - 2
+        lastCheck:
+          type: string
+          format: date-time
+          description: Дата последней проверки
+        id:
+          type: string
+          description: ID сущности, если она уже существует в системе
+        services:
+          type: array
+          items:
+            properties:
+              name:
+                type: string
+                description: Название сервиса
+              status:
+                type: boolean
+                description: Результат проверки. true - пройдена, зеленая
+        report:
+          type: string
+          description: Идентификатор сохраненного отчета
+    checkNotPossible:
+      description: Результат проверки, если недостаточно данных
+      properties:
+        code:
+          type: integer
+          description: Код результата проверки. В случае недостаточности данных всегда = 3
+        message:
+          type: string
+          description: Текстовое описание результата. Если прислано, то заменяет дефолтное сообщение из макета
+    forceCheck:
+      description: Повторная проверка, без учета таймаута между проверками
+      properties:
+        force:
+          type: boolean
+          description: Если true - запустить повторную проверку без учета кэша
 
     dictionary:
       description: Значение справочника
@@ -1582,6 +1686,13 @@ components:
       in: path
       name: issueID
       description: Идентификатор задачи
+      required: true
+      schema:
+        type: string
+    reportID:
+      in: path
+      name: reportID
+      description: Идентификатор отчета
       required: true
       schema:
         type: string
