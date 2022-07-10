@@ -8,6 +8,7 @@ tags:
   - name: Звонки
   - name: Задачи
   - name: Проверки
+  - name: Клиенты
   - name: Справочники
 
 paths:
@@ -70,6 +71,7 @@ paths:
         - $ref: '#/components/parameters/callResult'
         - $ref: '#/components/parameters/callOperator'
         - $ref: '#/components/parameters/callAssignee'
+        - $ref: '#/components/parameters/filterClientID'
       responses:
         '200':
           description: Список входящих звонков
@@ -139,6 +141,7 @@ paths:
         - $ref: '#/components/parameters/callResult'
         - $ref: '#/components/parameters/callOperator'
         - $ref: '#/components/parameters/callAssignee'
+        - $ref: '#/components/parameters/filterClientID'
       responses:
         '200':
           description: Список исходящих звонков
@@ -251,6 +254,7 @@ paths:
         - $ref: '#/components/parameters/seller'
         - $ref: '#/components/parameters/phone'
         - $ref: '#/components/parameters/vin'
+        - $ref: '#/components/parameters/filterClientID'
       responses:
         '200':
           description: Список доступных задач
@@ -406,6 +410,94 @@ paths:
           description: BiteArray файла с отчетом
         '404':
           description: Отчет не существует
+  /client:
+    get:
+      description: Список клиентов
+      tags:
+        - Клиенты
+      security:
+        - tokenized: []
+      parameters:
+        - $ref: '#/components/parameters/clientSort'
+        - $ref: '#/components/parameters/fullText'
+        - $ref: '#/components/parameters/createdAt'
+        - $ref: '#/components/parameters/clientStatus'
+        - $ref: '#/components/parameters/ppd'
+        - $ref: '#/components/parameters/clientType'
+        - $ref: '#/components/parameters/need'
+        - $ref: '#/components/parameters/canal'
+        - $ref: '#/components/parameters/contract'
+        - $ref: '#/components/parameters/dealer'
+        - $ref: '#/components/parameters/createdBy'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/email'
+        - $ref: '#/components/parameters/vin'
+      responses:
+        '200':
+          description: Список доступных клиентов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/paging'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/clientList'
+  /client/{clientID}:
+    get:
+      description: Информация о клиенте
+      tags:
+        - Клиенты
+      security:
+        - tokenized: [ ]
+      parameters:
+        - $ref: '#/components/parameters/clientID'
+      responses:
+        '200':
+          description: Информация о клиенте
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Идентификатор
+                  - allOf:
+                      - $ref: '#/components/schemas/clientCard'
+    put:
+      description: Обновление клиента
+      tags:
+        - Клиенты
+      security:
+        - tokenized: []
+      parameters:
+        - $ref: '#/components/parameters/clientID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/clientCard'
+      responses:
+        '200':
+          description: Результат обновления клиента
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      client:
+                        $ref: '#/components/schemas/clientCard'
+                  - oneOf:
+                      - $ref: '#/components/schemas/success'
+                      - $ref: '#/components/schemas/failed'
+
   /dictionary/dealer:
     get:
       description: Значения справочника "Автосалон"
@@ -874,6 +966,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/doors'
+  /dictionary/clientCreator:
+    get:
+      description: Список пользователей для фильтра "Создал клиента" в клиентах
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/clientCreator'
 
 components:
   securitySchemes:
@@ -1154,6 +1262,96 @@ components:
           $ref: '#/components/schemas/issueAssignee'
         car:
           $ref: '#/components/schemas/issueCar'
+    clientList:
+      description: Клиент в списке
+      properties:
+        status:
+          type: string
+          description: Статус клиента (Новый, Встреча, Отказ, Осмотр, Диагностика, Согласование, Сделка)
+          enum:
+            - new
+            - meeting
+            - decline
+            - inspection
+            - diagnostics
+            - agreement
+            - deal
+        type:
+          $ref: '#/components/parameters/clientType'
+        need:
+          $ref: '#/components/schemas/need'
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        ppd:
+          $ref: '#/components/schemas/ppd'
+        comment:
+          type: string
+          description: Комментарий
+        firstName:
+          type: string
+          description: Имя
+        lastName:
+          type: string
+          description: Фамилия
+        patronymic:
+          type: string
+          description: Отчество
+        phone:
+          type: string
+          description: Телефон
+        email:
+          type: string
+          description: Email
+        id:
+          type: string
+          description: Идентификтор
+    clientCard:
+      description: Карточка клиента
+      allOf:
+        - type: object
+          properties:
+            status:
+              type: string
+              description: Статус клиента (Новый, Встреча, Отказ, Осмотр, Диагностика, Согласование, Сделка)
+              enum:
+                - new
+                - meeting
+                - decline
+                - inspection
+                - diagnostics
+                - agreement
+                - deal
+            need:
+              $ref: '#/components/schemas/need'
+            brand:
+              $ref: '#/components/schemas/brand'
+            model:
+              $ref: '#/components/schemas/model'
+            dealer:
+              $ref: '#/components/schemas/dealer'
+            canal:
+              $ref: '#/components/schemas/canal'
+            contract:
+              $ref: '#/components/schemas/contract'
+            createdAt:
+              type: string
+              format: date-time
+              description: Дата создания
+            createdBy:
+              $ref: '#/components/schemas/clientCreator'
+            modifiedAt:
+              type: string
+              format: date-time
+              description: Дата последнего изменения
+            modifiedBy:
+              $ref: '#/components/schemas/clientCreator'
+            checkResult:
+              oneOf:
+                - $ref: '#/components/schemas/checkNotPossible'
+                - $ref: '#/components/schemas/checkResults'
+        - $ref: '#/components/schemas/counterparty'
     contact:
       description: Информация о клиенте
       oneOf:
@@ -1228,20 +1426,7 @@ components:
           type: string
           description: Адрес
         ppd:
-          type: boolean
-          description: Получено согласие на ОПД
-        signedAt:
-          type: string
-          format: date-time
-          description: Дата подписания
-        expiresAt:
-          type: string
-          format: date-time
-          description: Срок действия
-        scan:
-          type: string
-          format: binary
-          description: Фотография/скан согласия на ОПД
+          $ref: '#/components/schemas/ppd'
         comment:
           description: Комментаций
           type: string
@@ -1353,7 +1538,6 @@ components:
         force:
           type: boolean
           description: Если true - запустить повторную проверку без учета кэша
-
     dictionary:
       description: Значение справочника
       properties:
@@ -1483,6 +1667,10 @@ components:
       description: Класс автомобиля
       allOf:
         - $ref: '#/components/schemas/dictionary'
+    clientCreator:
+      description: Создатель клиента
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
     paging:
       description: Постраничная навигация
       properties:
@@ -1528,6 +1716,28 @@ components:
         total:
           description: Общее количество звонков по фильтру
           type: integer
+    ppd:
+      description: Согласие на обработку персональных данных
+      properties:
+        status:
+          type: string
+          description: Статус согласия (Действительно, Недействительно, Не получено)
+          enum:
+            - active
+            - inactive
+            - not
+        signedAt:
+          type: string
+          format: date-time
+          description: Дата подписание
+        expiredAt:
+          type: string
+          format: date-time
+          description: Дата окончания действия
+        scan:
+          type: string
+          format: binary
+          description: Фотография/скан согласия на ОПД
   parameters:
     fullText:
       in: query
@@ -1609,7 +1819,7 @@ components:
     issueStatus:
       in: query
       name: status
-      description: Фильтра по статусам задач (Всe, В работе, Завершено
+      description: Фильтра по статусам задач (Всe, В работе, Завершено)
       required: false
       schema:
         type: string
@@ -1747,6 +1957,83 @@ components:
       in: path
       name: reportID
       description: Идентификатор отчета
+      required: true
+      schema:
+        type: string
+    clientSort:
+      in: query
+      name: sort
+      description: Сортировка клиентов (новые по дате изменения, старые по дате изменения, новые по дате создания, старые по дате создания, по статусу "новый", по статусу "отказ")
+      required: false
+      schema:
+        type: string
+        enum:
+          - modified-desc
+          - modified-asc
+          - created-desc
+          - created-asc
+          - status-from-new
+          - status-from-decline
+    clientStatus:
+      in: query
+      name: status
+      description: Фильтра по статусам задач
+      required: false
+      schema:
+        type: string
+    ppd:
+      in: query
+      name: ppd
+      description: Согласие на обработку персональных данных
+      required: false
+      schema:
+        type: string
+    clientType:
+      in: query
+      name: type
+      description: Тип клиента (идентификатор из справочника типов клиентов)
+      required: false
+      schema:
+        type: string
+    need:
+      in: query
+      name: need
+      description: Потребность клиента
+      required: false
+      schema:
+        type: string
+    name:
+      in: query
+      name: name
+      description: ФИО клиента
+      required: false
+      schema:
+        type: string
+    email:
+      in: query
+      name: email
+      description: Email клиента
+      required: false
+      schema:
+        type: string
+    createdBy:
+      in: query
+      name: createdBy
+      description: Создал клиента
+      required: false
+      schema:
+        type: string
+    clientID:
+      in: path
+      name: clientID
+      description: Идентификатор клиента
+      required: true
+      schema:
+        type: string
+    filterClientID:
+      in: query
+      name: clientID
+      description: Идентификатор клиента
       required: true
       schema:
         type: string
