@@ -497,6 +497,42 @@ paths:
                   - oneOf:
                       - $ref: '#/components/schemas/success'
                       - $ref: '#/components/schemas/failed'
+  /client/{clientID}/car:
+    get:
+      description: Информация об автомобилях клиента
+      tags:
+        - Клиенты
+      security:
+        - tokenized: [ ]
+      parameters:
+        - $ref: '#/components/parameters/clientID'
+      responses:
+        '200':
+          description: Информация об автомобилях клиента
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/clientCar'
+  /client/{clientID}/valuation:
+    get:
+      description: Информация об оценках клиента
+      tags:
+        - Клиенты
+      security:
+        - tokenized: [ ]
+      parameters:
+        - $ref: '#/components/parameters/clientID'
+      responses:
+        '200':
+          description: Информация об оценках клиента
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/clientValuation'
 
   /dictionary/dealer:
     get:
@@ -1352,6 +1388,89 @@ components:
                 - $ref: '#/components/schemas/checkNotPossible'
                 - $ref: '#/components/schemas/checkResults'
         - $ref: '#/components/schemas/counterparty'
+    clientCar:
+      description: Автомобиль клиента
+      properties:
+        id:
+          type: string
+          description: Идентификатор автомобиля
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        generation:
+          $ref: '#/components/schemas/generation'
+        engineVolume:
+          type: number
+          description: Объем двигателя, л.
+        transmission:
+          $ref: '#/components/schemas/transmissionType'
+        color:
+          $ref: '#/components/schemas/carColor'
+        mileage:
+          type: number
+          description: Пробег
+        vin:
+          type: string
+          description: VIN
+        number:
+          type: string
+          description: Гос. номер
+        clientPrice:
+          type: number
+          description: Цена клиента
+        inspection:
+          type: string
+          description: Статус осмотра (Не проводился, В процессе, Завершен, Не состоялся)
+          enum:
+            - not
+            - progress
+            - done
+            - notTakePlace
+    clientValuation:
+      description: Оценка клиента
+      properties:
+        id:
+          type: string
+          description: Идентификатор оценки
+        need:
+          $ref: '#/components/schemas/need'
+        status:
+          type: string
+          description: Статус оценки (Черновик, Ожидает, В процессе, Завершена, Отказ клиента, Отказ оценщика, Отказ мастер)
+          enum:
+            - draft
+            - waiting
+            - progress
+            - done
+            - declineClient
+            - declineAppraiser
+            - declineMaster
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        generation:
+          $ref: '#/components/schemas/generation'
+        engineVolume:
+          type: number
+          description: Объем двигателя, л.
+        transmission:
+          $ref: '#/components/schemas/transmissionType'
+        color:
+          $ref: '#/components/schemas/carColor'
+        mileage:
+          type: number
+          description: Пробег
+        vin:
+          type: string
+          description: VIN
+        buyOut:
+          $ref: '#/components/schemas/buyOutState'
+        inspection:
+          $ref: '#/components/schemas/inspectionState'
+        diagnostics:
+          $ref: '#/components/schemas/diagnosticsState'
     contact:
       description: Информация о клиенте
       oneOf:
@@ -1647,10 +1766,20 @@ components:
       description: Цвет кузова
       allOf:
         - $ref: '#/components/schemas/dictionary'
+        - type: object
+          properties:
+            hex:
+              type: string
+              description: HEX цвета
     interiorColor:
       description: Цвет салона
       allOf:
         - $ref: '#/components/schemas/dictionary'
+        - type: object
+          properties:
+            hex:
+              type: string
+              description: HEX цвета
     condition:
       description: Состояние
       allOf:
@@ -1738,6 +1867,36 @@ components:
           type: string
           format: binary
           description: Фотография/скан согласия на ОПД
+    buyOutState:
+      description: Инфо о выкупе
+      properties:
+        price:
+          type: number
+          description: Цена выкупа
+        date:
+          type: string
+          format: date-time
+          description: Дата выкупа
+    inspectionState:
+      description: Инфо об осмотре
+      properties:
+        status:
+          type: string
+          description: Статус осмотра
+        date:
+          type: string
+          format: date-time
+          description: Дата осмотра
+    diagnosticsState:
+      description: Инфо о диагностике
+      properties:
+        status:
+          type: string
+          description: Статус диагностики
+        date:
+          type: string
+          format: date-time
+          description: Дата диагностики
   parameters:
     fullText:
       in: query
