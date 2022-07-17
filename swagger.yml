@@ -575,7 +575,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/dealer'
+                  $ref: '#/components/schemas/dealerTree'
   /dictionary/operator:
     get:
       description: Значения справочника "Оператор"
@@ -1699,6 +1699,19 @@ components:
       description: Автосалон
       allOf:
         - $ref: '#/components/schemas/dictionary'
+    dealerTree:
+      description: Древовидный список автомалонов
+      properties:
+        groupName:
+          type: string
+          description: Название группы
+        id:
+          type: string
+          description: Идентификатор группы
+        values:
+          type: array
+          items:
+            - $ref: '#/components/schemas/dictionary'
     operator:
       description: Оператор
       allOf:
