@@ -1209,6 +1209,9 @@ components:
             - finished
             - noAnswer
             - busy
+        fromNumber:
+          type: string
+          description: Номер телефона звонящего
         time:
           type: string
           format: date-time
