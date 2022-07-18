@@ -1711,7 +1711,7 @@ components:
         values:
           type: array
           items:
-            - $ref: '#/components/schemas/dictionary'
+            $ref: '#/components/schemas/dictionary'
     operator:
       description: Оператор
       allOf:
