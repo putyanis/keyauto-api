@@ -9,6 +9,7 @@ tags:
   - name: Задачи
   - name: Проверки
   - name: Клиенты
+  - name: Оценки
   - name: Справочники
 
 paths:
@@ -420,6 +421,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/clientSort'
         - $ref: '#/components/parameters/fullText'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
         - $ref: '#/components/parameters/createdAt'
         - $ref: '#/components/parameters/clientStatus'
         - $ref: '#/components/parameters/ppd'
@@ -559,6 +562,83 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/clientValuation'
+  /valuation:
+    get:
+      description: Список оценок
+      tags:
+        - Оценки
+      security:
+        - tokenized: []
+      parameters:
+        - $ref: '#/components/parameters/valuationSort'
+        - $ref: '#/components/parameters/fullText'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/valuationStatus'
+        - $ref: '#/components/parameters/createdAt'
+        - $ref: '#/components/parameters/inspectedAt'
+        - $ref: '#/components/parameters/diagnosticsAt'
+        - $ref: '#/components/parameters/acceptedAt'
+        - $ref: '#/components/parameters/inspectionStatus'
+        - $ref: '#/components/parameters/diagnosticsStatus'
+        - $ref: '#/components/parameters/agreementStatus'
+        - $ref: '#/components/parameters/purchasePrice'
+        - $ref: '#/components/parameters/purchasePriceDiff'
+        - $ref: '#/components/parameters/arrivalStatus'
+        - $ref: '#/components/parameters/warehouseID'
+        - $ref: '#/components/parameters/canal'
+        - $ref: '#/components/parameters/contract'
+        - $ref: '#/components/parameters/dealer'
+        - $ref: '#/components/parameters/createdBy'
+        - $ref: '#/components/parameters/valuationAssignee'
+        - $ref: '#/components/parameters/seller'
+        - $ref: '#/components/parameters/valuationContractor'
+        - $ref: '#/components/parameters/valuationClientStatus'
+        - $ref: '#/components/parameters/ppd'
+        - $ref: '#/components/parameters/valuationClientType'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/phone'
+        - $ref: '#/components/parameters/email'
+        - $ref: '#/components/parameters/need'
+        - $ref: '#/components/parameters/vin'
+        - $ref: '#/components/parameters/carNumber'
+        - $ref: '#/components/parameters/bodyNumber'
+        - $ref: '#/components/parameters/engineNumber'
+        - $ref: '#/components/parameters/carType'
+        - $ref: '#/components/parameters/brand'
+        - $ref: '#/components/parameters/model'
+        - $ref: '#/components/parameters/generation'
+        - $ref: '#/components/parameters/bodyType'
+        - $ref: '#/components/parameters/wheelPosition'
+        - $ref: '#/components/parameters/year'
+        - $ref: '#/components/parameters/engineType'
+        - $ref: '#/components/parameters/engineVolume'
+        - $ref: '#/components/parameters/enginePower'
+        - $ref: '#/components/parameters/transmissionType'
+        - $ref: '#/components/parameters/driveType'
+        - $ref: '#/components/parameters/mileage'
+        - $ref: '#/components/parameters/carColor'
+        - $ref: '#/components/parameters/metallic'
+        - $ref: '#/components/parameters/interiorColor'
+        - $ref: '#/components/parameters/condition'
+        - $ref: '#/components/parameters/seats'
+        - $ref: '#/components/parameters/doors'
+        - $ref: '#/components/parameters/armored'
+        - $ref: '#/components/parameters/class'
+      responses:
+        '200':
+          description: Массив доступных оценок
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/paging'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/valuationList'
 
   /dictionary/dealer:
     get:
@@ -804,7 +884,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/callType'
-  /dictionary/callAssignees:
+  /dictionary/callAssignee:
     get:
       description: Список пользователей для фильтра "Ответственный" в звонках
       tags:
@@ -948,6 +1028,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/driveType'
+  /dictionary/engineType:
+    get:
+      description: Список типов двигателя
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/engineType'
   /dictionary/carColor:
     get:
       description: Список цветов кузова
@@ -1044,6 +1140,86 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/clientCreator'
+  /dictionary/valuationCreator:
+    get:
+      description: Список пользователей для фильтра "Создал оценку" в оценках
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/valuationCreator'
+  /dictionary/valuationAssignee:
+    get:
+      description: Список пользователей для фильтра "Ответственный" в оценках
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/valuationAssignee'
+  /dictionary/valuationContractors:
+    get:
+      description: Список пользователей для фильтра "Согласовал оценку" в оценках
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/valuationContractor'
+  /dictionary/clientType:
+    get:
+      description: Список типов клиентов
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/clientType'
+  /dictionary/carClass:
+    get:
+      description: Список классов автомобиля
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/class'
 
 components:
   securitySchemes:
@@ -1500,6 +1676,51 @@ components:
           $ref: '#/components/schemas/inspectionState'
         diagnostics:
           $ref: '#/components/schemas/diagnosticsState'
+    valuationList:
+      description: Оценка в списке
+      properties:
+        id:
+          type: string
+          description: Идентификатор оценки
+        status:
+          type: string
+          description: Статус оценки (Черновик, Ожидает, В процессе, Завершена, Отказ клиента, Отказ оценщика, Отказ мастер)
+          enum:
+            - draft
+            - waiting
+            - progress
+            - done
+            - declineClient
+            - declineAppraiser
+            - declineMaster
+        need:
+          $ref: '#/components/schemas/need'
+        brand:
+          $ref: '#/components/schemas/brand'
+        model:
+          $ref: '#/components/schemas/model'
+        year:
+          type: string
+          description: Год выпуска
+        engineVolume:
+          type: string
+          description: Объем двигателя
+        transmission:
+          $ref: '#/components/schemas/transmissionType'
+        color:
+          $ref: '#/components/schemas/carColor'
+        mileage:
+          type: number
+          description: Пробег
+        vin:
+          type: string
+          description: VIN
+        inspection:
+          $ref: '#/components/schemas/inspectionState'
+        buyOutState:
+          $ref: '#/components/schemas/buyOutState'
+        diagnostics:
+          $ref: '#/components/schemas/diagnosticsState'
     contact:
       description: Информация о клиенте
       oneOf:
@@ -1804,6 +2025,10 @@ components:
       description: Тип привода
       allOf:
         - $ref: '#/components/schemas/dictionary'
+    engineType:
+      description: Тип двигателя
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
     carColor:
       description: Цвет кузова
       allOf:
@@ -1840,6 +2065,22 @@ components:
         - $ref: '#/components/schemas/dictionary'
     clientCreator:
       description: Создатель клиента
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    valuationCreator:
+      description: Создатель оценки
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    valuationAssignee:
+      description: Ответственный за оценку
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    valuationContractor:
+      description: Согласовал оценку
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    clientType:
+      description: тип клиента
       allOf:
         - $ref: '#/components/schemas/dictionary'
     paging:
@@ -1934,11 +2175,31 @@ components:
       properties:
         status:
           type: string
-          description: Статус диагностики
+          description: Статус диагностики (Не проводилась, В процессе, Завершена, Не состоялась)
+          enum:
+            - not
+            - progress
+            - done
+            - notTakePlace
         date:
           type: string
           format: date-time
           description: Дата диагностики
+    arrivalState:
+      description: Инфо о поступлении
+      properties:
+        status:
+          type: string
+          description: Статус поступления (Ожидает создания, Создано, Ожидает проведения, Проведено/На складе)
+          enum:
+            - waitingCreate
+            - created
+            - waitingStock
+            - inStock
+        date:
+          type: string
+          format: date-time
+          description: Дата поступления
   parameters:
     fullText:
       in: query
@@ -1998,6 +2259,30 @@ components:
       in: query
       name: created
       description: Дата создания
+      required: false
+      schema:
+        type: string
+        format: date-time
+    inspectedAt:
+      in: query
+      name: created
+      description: Дата проведения осмотра
+      required: false
+      schema:
+        type: string
+        format: date-time
+    diagnosticsAt:
+      in: query
+      name: created
+      description: Дата проведения диагностики
+      required: false
+      schema:
+        type: string
+        format: date-time
+    acceptedAt:
+      in: query
+      name: created
+      description: Дата приема на склад
       required: false
       schema:
         type: string
@@ -2178,7 +2463,266 @@ components:
     clientStatus:
       in: query
       name: status
-      description: Фильтра по статусам задач
+      description: Фильтр по статусам клиентов
+      required: false
+      schema:
+        type: string
+    valuationClientStatus:
+      in: query
+      name: clientStatus
+      description: Фильтр по статусам клиентов
+      required: false
+      schema:
+        type: string
+    valuationSort:
+      in: query
+      name: sort
+      description: Сортировка оценок (новые по дате изменения, старые по дате изменения, новые по дате создания, старые по дате создания, сначала черновики, сначала отказы)
+      required: false
+      schema:
+        type: string
+        enum:
+          - modified-desc
+          - modified-asc
+          - created-desc
+          - created-asc
+          - status-from-draft
+          - status-from-decline
+    valuationStatus:
+      in: query
+      name: status
+      description: Фильтр по статусам оценок
+      required: false
+      schema:
+        type: string
+    inspectionStatus:
+      in: query
+      name: inspectionStatus
+      description: Фильтр по статусам осмотра
+      required: false
+      schema:
+        type: string
+    diagnosticsStatus:
+      in: query
+      name: diagnosticsStatus
+      description: Фильтр по статусам диагностики
+      required: false
+      schema:
+        type: string
+    agreementStatus:
+      in: query
+      name: agreementStatus
+      description: Фильтр по статусам согласования цены
+      required: false
+      schema:
+        type: string
+    purchasePrice:
+      in: query
+      name: purchasePrice
+      description: Фильтр по стоимости выкупа
+      required: false
+      schema:
+        type: number
+    purchasePriceDiff:
+      in: query
+      name: purchasePriceDiff
+      description: Фильтр по разнице в предложении
+      required: false
+      schema:
+        type: number
+    arrivalStatus:
+      in: query
+      name: arrivalStatus
+      description: Фильтр по статусу поступления
+      required: false
+      schema:
+        type: number
+    warehouseID:
+      in: query
+      name: warehouseID
+      description: Фильтр по идентификатору на складе
+      required: false
+      schema:
+        type: string
+    valuationAssignee:
+      in: query
+      name: assignee
+      description: Ответственный (null если отмечен "Нет ответственного")
+      required: false
+      schema:
+        type: string
+    valuationContractor:
+      in: query
+      name: assignee
+      description: Ответственный (null если отмечен "Нет ответственного")
+      required: false
+      schema:
+        type: string
+    carNumber:
+      in: query
+      name: carNumber
+      description: Гос. номер автомобиля
+      required: false
+      schema:
+        type: string
+    bodyNumber:
+      in: query
+      name: bodyNumber
+      description: Номер кузова
+      required: false
+      schema:
+        type: string
+    engineNumber:
+      in: query
+      name: engineNumber
+      description: Номер двигателя
+      required: false
+      schema:
+        type: string
+    carType:
+      in: query
+      name: carType
+      description: Тип ТС
+      required: false
+      schema:
+        type: string
+    brand:
+      in: query
+      name: brand
+      description: Идентификатор марки
+      required: false
+      schema:
+        type: string
+    model:
+      in: query
+      name: model
+      description: Идентификатор модели
+      required: false
+      schema:
+        type: string
+    generation:
+      in: query
+      name: generation
+      description: Идентификатор поколения
+      required: false
+      schema:
+        type: string
+    bodyType:
+      in: query
+      name: bodyType
+      description: Тип кузова
+      required: false
+      schema:
+        type: string
+    wheelPosition:
+      in: query
+      name: wheelPosition
+      description: Расположение руля
+      required: false
+      schema:
+        type: string
+    year:
+      in: query
+      name: year
+      description: Год выпуска
+      required: false
+      schema:
+        type: string
+    engineType:
+      in: query
+      name: engineType
+      description: Тип двигателя
+      required: false
+      schema:
+        type: string
+    engineVolume:
+      in: query
+      name: engineVolume
+      description: Объем двигателя
+      required: false
+      schema:
+        type: string
+    enginePower:
+      in: query
+      name: enginePower
+      description: Мощность двигателя
+      required: false
+      schema:
+        type: string
+    transmissionType:
+      in: query
+      name: transmissionType
+      description: Тип коробки передач
+      required: false
+      schema:
+        type: string
+    driveType:
+      in: query
+      name: driveType
+      description: Тип привода
+      required: false
+      schema:
+        type: string
+    mileage:
+      in: query
+      name: mileage
+      description: Пробег
+      required: false
+      schema:
+        type: string
+    carColor:
+      in: query
+      name: carColor
+      description: Цвет кузова
+      required: false
+      schema:
+        type: string
+    metallic:
+      in: query
+      name: metallic
+      description: Признак металлик
+      required: false
+      schema:
+        type: boolean
+    interiorColor:
+      in: query
+      name: interiorColor
+      description: Цвет салона
+      required: false
+      schema:
+        type: string
+    condition:
+      in: query
+      name: condition
+      description: Состояние
+      required: false
+      schema:
+        type: string
+    seats:
+      in: query
+      name: seats
+      description: Количество мест
+      required: false
+      schema:
+        type: number
+    doors:
+      in: query
+      name: doors
+      description: Количество дверей
+      required: false
+      schema:
+        type: number
+    armored:
+      in: query
+      name: armored
+      description: Бронированный автомобиль
+      required: false
+      schema:
+        type: boolean
+    class:
+      in: query
+      name: class
+      description: Класс ТС
       required: false
       schema:
         type: string
@@ -2192,6 +2736,13 @@ components:
     clientType:
       in: query
       name: type
+      description: Тип клиента (идентификатор из справочника типов клиентов)
+      required: false
+      schema:
+        type: string
+    valuationClientType:
+      in: query
+      name: clientType
       description: Тип клиента (идентификатор из справочника типов клиентов)
       required: false
       schema:
@@ -2220,7 +2771,7 @@ components:
     createdBy:
       in: query
       name: createdBy
-      description: Создал клиента
+      description: Создал сущность
       required: false
       schema:
         type: string
