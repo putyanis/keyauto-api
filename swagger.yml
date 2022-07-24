@@ -1220,6 +1220,118 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/class'
+  /dictionary/tyreType:
+    get:
+      description: Список типов резины
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tyreType'
+  /dictionary/tyreCondition:
+    get:
+      description: Список типов износа
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tyreCondition'
+  /dictionary/tyreBrand:
+    get:
+      description: Список марок резины
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tyreBrand'
+  /dictionary/rimType:
+    get:
+      description: Список типов дисков
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/rimType'
+  /dictionary/rimSize:
+    get:
+      description: Список размеров дисков
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/rimSize'
+  /dictionary/customsStatue:
+    get:
+      description: Список таможенных статусов
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customsStatue'
+  /dictionary/pts:
+    get:
+      description: Список вариантов ПТС
+      tags:
+        - Справочники
+      security:
+        - tokenized: [ ]
+      responses:
+        '200':
+          description: Массив значений
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pts'
 
 components:
   securitySchemes:
@@ -2127,6 +2239,34 @@ components:
         - $ref: '#/components/schemas/dictionary'
     class:
       description: Класс автомобиля
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    tyreType:
+      description: Тип резины
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    tyreCondition:
+      description: Состояние резины
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    tyreBrand:
+      description: Марка резины
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    rimType:
+      description: Тип дисков
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    rimSize:
+      description: Размер дисков
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    customsStatue:
+      description: Таможенный статус
+      allOf:
+        - $ref: '#/components/schemas/dictionary'
+    pts:
+      description: ПТС
       allOf:
         - $ref: '#/components/schemas/dictionary'
     clientCreator:
