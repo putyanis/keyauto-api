@@ -1282,6 +1282,12 @@ components:
           $ref: '#/components/schemas/contact'
         need:
           $ref: '#/components/schemas/need'
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     callCardIn:
       properties:
         status:
@@ -1325,6 +1331,12 @@ components:
         record:
           type: string
           description: Ссылка на файл с записью звонка
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     callCardInUpdate:
       properties:
         contact:
@@ -1344,6 +1356,12 @@ components:
           $ref: '#/components/schemas/operator'
         contract:
           $ref: '#/components/schemas/contract'
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     callCardOutUpdate:
       properties:
         contact:
@@ -1365,6 +1383,12 @@ components:
           $ref: '#/components/schemas/dealer'
         contract:
           $ref: '#/components/schemas/contract'
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     callCardOut:
       allOf:
         - $ref: '#/components/schemas/callCardIn'
@@ -1414,6 +1438,12 @@ components:
         contract:
           type: string
           description: Идентификатор из справочника "Контракт"
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     newCallExtended:
       allOf:
         - $ref: '#/components/schemas/newCall'
@@ -1452,6 +1482,12 @@ components:
             - todo
             - progress
             - done
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     issueCard:
       description: Информация о задаче
       properties:
@@ -1503,6 +1539,12 @@ components:
           $ref: '#/components/schemas/issueAssignee'
         car:
           $ref: '#/components/schemas/issueCar'
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     clientList:
       description: Клиент в списке
       properties:
@@ -1548,6 +1590,12 @@ components:
         id:
           type: string
           description: Идентификтор
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     clientCard:
       description: Карточка клиента
       allOf:
@@ -1592,6 +1640,12 @@ components:
               oneOf:
                 - $ref: '#/components/schemas/checkNotPossible'
                 - $ref: '#/components/schemas/checkResults'
+            reseller:
+              type: boolean
+              description: Перекуп
+            otm:
+              type: boolean
+              description: ОТМ
         - $ref: '#/components/schemas/counterparty'
     clientCar:
       description: Автомобиль клиента
@@ -1676,6 +1730,12 @@ components:
           $ref: '#/components/schemas/inspectionState'
         diagnostics:
           $ref: '#/components/schemas/diagnosticsState'
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     valuationList:
       description: Оценка в списке
       properties:
@@ -1721,6 +1781,12 @@ components:
           $ref: '#/components/schemas/buyOutState'
         diagnostics:
           $ref: '#/components/schemas/diagnosticsState'
+        reseller:
+          type: boolean
+          description: Перекуп
+        otm:
+          type: boolean
+          description: ОТМ
     contact:
       description: Информация о клиенте
       oneOf:
